@@ -5,15 +5,15 @@ using System.Collections.Generic;
 
 namespace AplicacionWebProgramacion3.Models;
 
-public partial class Fertilizantes
+public partial class AspNetUserClaims
 {
     public int Id { get; set; }
-    public string Nombre { get; set; }
-    public string Forma { get; set; }
 
-    public string Composicion { get; set; }
+    public string UserId { get; set; }
 
-    public string Tipo { get; set; }
+    public string ClaimType { get; set; }
 
-    public string Descripcion { get; set; }
+    public string ClaimValue { get; set; }
+
+    public virtual AspNetUsers User { get; set; }
 }

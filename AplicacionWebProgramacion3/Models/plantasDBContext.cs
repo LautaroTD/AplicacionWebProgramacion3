@@ -13,71 +13,94 @@ public partial class plantasDBContext : DbContext
     {
     }
 
-    public virtual DbSet<Fertilizantes> Fertilizantes { get; set; }
+    public virtual DbSet<AspNetRoleClaims> AspNetRoleClaims { get; set; }
 
-    public virtual DbSet<Plantas> Plantas { get; set; }
+    public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
 
-    public virtual DbSet<Suelos> Suelos { get; set; }
+    public virtual DbSet<AspNetUserClaims> AspNetUserClaims { get; set; }
+
+    public virtual DbSet<AspNetUserLogins> AspNetUserLogins { get; set; }
+
+    public virtual DbSet<AspNetUserTokens> AspNetUserTokens { get; set; }
+
+    public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Fertilizantes>(entity =>
+        modelBuilder.Entity<AspNetRoleClaims>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Fertiliz__3213E83F2C30A0AA");
+            entity.HasIndex(e => e.RoleId, "IX_AspNetRoleClaims_RoleId");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("id");
-            entity.Property(e => e.Nombre)
-                .HasMaxLength(150)
-                .IsUnicode(false)
-                .HasColumnName("nombre");
-            entity.Property(e => e.Composicion)
-                .HasMaxLength(300)
-                .IsUnicode(false)
-                .HasColumnName("composicion");
-            entity.Property(e => e.Descripcion)
-                .HasMaxLength(1000)
-                .IsUnicode(false)
-                .HasColumnName("descripcion");
-            entity.Property(e => e.Forma)
-                .HasMaxLength(60)
-                .IsUnicode(false)
-                .HasColumnName("forma");
-            entity.Property(e => e.Tipo)
-                .HasMaxLength(60)
-                .IsUnicode(false)
-                .HasColumnName("tipo");
+            entity.Property(e => e.RoleId).IsRequired();
+
+            entity.HasOne(d => d.Role).WithMany(p => p.AspNetRoleClaims).HasForeignKey(d => d.RoleId);
         });
 
-        modelBuilder.Entity<Plantas>(entity =>
+        modelBuilder.Entity<AspNetRoles>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Plantas__3213E83FB3CA9534");
+            entity.HasIndex(e => e.NormalizedName, "RoleNameIndex")
+                .IsUnique()
+                .HasFilter("([NormalizedName] IS NOT NULL)");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("id");
-            entity.Property(e => e.AlturaMaxima).HasColumnName("altura_maxima");
-            entity.Property(e => e.Autor)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("autor");
-            entity.Property(e => e.Descripcion)
-                .HasMaxLength(1000)
-                .IsUnicode(false)
-                .HasColumnName("descripcion");
-            entity.Property(e => e.EpocaFloracion)
-                .HasMaxLength(200)
-                .IsUnicode(false)
-                .HasColumnName("epoca_floracion");
-            entity.Property(e => e.NombreCientifico)
-                .HasMaxLength(200)
-                .IsUnicode(false)
-                .HasColumnName("nombre_cientifico");
-            entity.Property(e => e.NombreVulgar)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("nombre_vulgar");
+            entity.Property(e => e.Name).HasMaxLength(256);
+            entity.Property(e => e.NormalizedName).HasMaxLength(256);
+        });
+
+        modelBuilder.Entity<AspNetUserClaims>(entity =>
+        {
+            entity.HasIndex(e => e.UserId, "IX_AspNetUserClaims_UserId");
+
+            entity.Property(e => e.UserId).IsRequired();
+
+            entity.HasOne(d => d.User).WithMany(p => p.AspNetUserClaims).HasForeignKey(d => d.UserId);
+        });
+
+        modelBuilder.Entity<AspNetUserLogins>(entity =>
+        {
+            entity.HasKey(e => new { e.LoginProvider, e.ProviderKey });
+
+            entity.HasIndex(e => e.UserId, "IX_AspNetUserLogins_UserId");
+
+            entity.Property(e => e.LoginProvider).HasMaxLength(128);
+            entity.Property(e => e.ProviderKey).HasMaxLength(128);
+            entity.Property(e => e.UserId).IsRequired();
+
+            entity.HasOne(d => d.User).WithMany(p => p.AspNetUserLogins).HasForeignKey(d => d.UserId);
+        });
+
+        modelBuilder.Entity<AspNetUserTokens>(entity =>
+        {
+            entity.HasKey(e => new { e.UserId, e.LoginProvider, e.Name });
+
+            entity.Property(e => e.LoginProvider).HasMaxLength(128);
+            entity.Property(e => e.Name).HasMaxLength(128);
+
+            entity.HasOne(d => d.User).WithMany(p => p.AspNetUserTokens).HasForeignKey(d => d.UserId);
+        });
+
+        modelBuilder.Entity<AspNetUsers>(entity =>
+        {
+            entity.HasIndex(e => e.NormalizedEmail, "EmailIndex");
+
+            entity.HasIndex(e => e.NormalizedUserName, "UserNameIndex")
+                .IsUnique()
+                .HasFilter("([NormalizedUserName] IS NOT NULL)");
+
+            entity.Property(e => e.Email).HasMaxLength(256);
+            entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
+            entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
+            entity.Property(e => e.UserName).HasMaxLength(256);
+
+            entity.HasMany(d => d.Role).WithMany(p => p.User)
+                .UsingEntity<Dictionary<string, object>>(
+                    "AspNetUserRoles",
+                    r => r.HasOne<AspNetRoles>().WithMany().HasForeignKey("RoleId"),
+                    l => l.HasOne<AspNetUsers>().WithMany().HasForeignKey("UserId"),
+                    j =>
+                    {
+                        j.HasKey("UserId", "RoleId");
+                        j.HasIndex(new[] { "RoleId" }, "IX_AspNetUserRoles_RoleId");
+                    });
         });
 
         OnModelCreatingPartial(modelBuilder);
