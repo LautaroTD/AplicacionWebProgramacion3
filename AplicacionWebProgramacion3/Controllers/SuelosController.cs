@@ -33,7 +33,7 @@ namespace AplicacionWebProgramacion3.Controllers
             }
 
             var suelos = await _context.Suelos
-                .FirstOrDefaultAsync(m => m.id == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (suelos == null)
             {
                 return NotFound();
@@ -87,7 +87,7 @@ namespace AplicacionWebProgramacion3.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("id,Nombre,pH,Tipo")] Suelos suelos)
         {
-            if (id != suelos.id)
+            if (id != suelos.Id)
             {
                 return NotFound();
             }
@@ -101,7 +101,7 @@ namespace AplicacionWebProgramacion3.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SuelosExists(suelos.id))
+                    if (!SuelosExists(suelos.Id))
                     {
                         return NotFound();
                     }
@@ -124,7 +124,7 @@ namespace AplicacionWebProgramacion3.Controllers
             }
 
             var suelos = await _context.Suelos
-                .FirstOrDefaultAsync(m => m.id == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (suelos == null)
             {
                 return NotFound();
@@ -150,7 +150,7 @@ namespace AplicacionWebProgramacion3.Controllers
 
         private bool SuelosExists(int id)
         {
-            return _context.Suelos.Any(e => e.id == id);
+            return _context.Suelos.Any(e => e.Id == id);
         }
     }
 }

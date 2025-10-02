@@ -14,19 +14,99 @@ public partial class plantasDBContext : DbContext
     }
 
     public virtual DbSet<AspNetRoleClaims> AspNetRoleClaims { get; set; }
-
+    public virtual DbSet<Plantas> Plantas { get; set; }
+    public virtual DbSet<Fertilizantes> Fertilizantes { get; set; }
     public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
-
     public virtual DbSet<AspNetUserClaims> AspNetUserClaims { get; set; }
-
     public virtual DbSet<AspNetUserLogins> AspNetUserLogins { get; set; }
-
     public virtual DbSet<AspNetUserTokens> AspNetUserTokens { get; set; }
-
     public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
+    public virtual DbSet<Suelos> Suelos { get; set; }
+    public virtual DbSet<Usuario> Usuarios { get; set; } //aca el nombre que yo le quiero dar a la tabla en la base de datos al llamarla desde este proyecto con lineas como "_context.Usuarios.FirstOrDefault()" //En el "DbSet<Usuario>" va el nombre del modelo local del proyecto.
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Suelos>(entity =>
+        {
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Nombre).IsRequired();
+            entity.Property(e => e.PH).HasColumnName("pH");
+            entity.Property(e => e.Tipo).IsRequired();
+        });
+        modelBuilder.Entity<Plantas>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Plantas__3213E83FB3CA9534");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.AlturaMaxima).HasColumnName("altura_maxima");
+            entity.Property(e => e.Autor)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("autor");
+            entity.Property(e => e.Descripcion)
+                .HasMaxLength(1000)
+                .IsUnicode(false)
+                .HasColumnName("descripcion");
+            entity.Property(e => e.EpocaFloracion)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("epoca_floracion");
+            entity.Property(e => e.NombreCientifico)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("nombre_cientifico");
+            entity.Property(e => e.NombreVulgar)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("nombre_vulgar");
+            entity.Property(e => e.Imagen)
+                  .HasMaxLength(500)
+                  .IsUnicode(false)
+                  .HasColumnName("imagen");
+        });
+
+        modelBuilder.Entity<Fertilizantes>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Fertiliz__3213E83F2C30A0AA");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.Composicion)
+                .HasMaxLength(300)
+                .IsUnicode(false)
+                .HasColumnName("composicion");
+            entity.Property(e => e.Descripcion)
+                .HasMaxLength(1000)
+                .IsUnicode(false)
+                .HasColumnName("descripcion");
+            entity.Property(e => e.Forma)
+                .HasMaxLength(60)
+                .IsUnicode(false)
+                .HasColumnName("forma");
+            entity.Property(e => e.Nombre)
+                .HasMaxLength(150)
+                .IsUnicode(false)
+                .HasColumnName("nombre");
+            entity.Property(e => e.Tipo)
+                .HasMaxLength(60)
+                .IsUnicode(false)
+                .HasColumnName("tipo");
+        });
+        modelBuilder.Entity<Usuario>(entity =>
+        {
+            entity.ToTable("Usuario"); //aca el nombre de la tabla
+
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.Name).IsRequired().HasMaxLength(250);
+            entity.Property(e => e.Password).IsRequired().HasMaxLength(250);
+            entity.Property(e => e.Role).IsRequired().HasMaxLength(50);
+            entity.Property(e => e.Imagen).HasMaxLength(250);
+        });
+
         modelBuilder.Entity<AspNetRoleClaims>(entity =>
         {
             entity.HasIndex(e => e.RoleId, "IX_AspNetRoleClaims_RoleId");

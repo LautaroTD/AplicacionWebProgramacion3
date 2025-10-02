@@ -1,1 +1,41 @@
-﻿
+﻿@using AplicacionWebProgramacion3.DTOs;
+@model RegisterDTO;
+
+@{
+    ViewData["Title"] = "Register";
+}
+<h2>@ViewData["Title"]</h2>
+
+<body>
+
+    <form asp-action="Register" asp-controller="User" method="post">
+
+        <div class="form-group">
+            <label>Nombre</label>
+            <input asp-for="Name" class="form-control" />
+        </div>
+        
+        <div class="form-group">
+            <label>Contraseña</label>
+            <input asp-for="Password" class="form-control" type="password" />
+        </div>
+
+        <div class="form-group">
+            <label>Verificar Contraseña</label>
+            <input asp-for="PasswordForVerification" class="form-control" type="password" />
+        </div>
+
+        <div class="form-group">
+            <label>Rol</label>
+            <input asp-for="Role" class="form-control"/>
+        </div>
+
+        <div class="form-group">
+            <label>Imagen</label>
+            <input asp-for="Imagen" class="form-control" />
+        </div>
+
+        <button type="submit">-{Registrar}-</button>
+    </form>
+
+</body>

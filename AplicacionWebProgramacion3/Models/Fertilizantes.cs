@@ -1,0 +1,17 @@
+﻿namespace AplicacionWebProgramacion3.Models
+{
+    public partial class Fertilizantes
+    {
+        public int Id { get; set; }
+
+        public string Nombre { get; set; }
+
+        public string Forma { get; set; }
+
+        public string Composicion { get; set; }
+
+        public string Tipo { get; set; }
+
+        public string Descripcion { get; set; }
+    }
+}

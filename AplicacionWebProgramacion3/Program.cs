@@ -20,21 +20,38 @@ var builder = WebApplication.CreateBuilder(args);
 
 //estoy seguro que hay una mejor forma pero nose lmao.
 
-
+////Hare cambios poco a poco hasta adaptarlo para usar las tablas de AspNet Identity. Vere si puedo.
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+builder.Services.AddAuthorization();
+
+builder.Services.AddAuthentication(options => { options.DefaultScheme = "MyCookieAuth"; })
+    .AddCookie("MyCookieAuth", options =>
+    {
+        options.Cookie.Name = "MyCookieAuth";
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SameSite = SameSiteMode.Lax;  // O None si es necesario, según contexto
+        options.Cookie.SecurePolicy = CookieSecurePolicy.None; // Para localhost / HTTP
+        options.LoginPath = "/Shared/Login";
+        options.AccessDeniedPath = "/Shared/Error";
+    });
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
 builder.Services.AddDbContext<plantasDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("plantasDBContext")));
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+app.MapIdentityApi<IdentityUser>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
