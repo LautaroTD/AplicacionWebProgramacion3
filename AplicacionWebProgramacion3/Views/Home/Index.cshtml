@@ -8,9 +8,14 @@
 
 <a asp-action="Index" asp-controller="Fertilizantes" class="btn d-block mx-auto btn-lg"> Boton Temporal para Ir a Fertilizantes Index </a>
 
-<a asp-action="Login" asp-controller="User" class="btn d-block mx-auto btn-lg"> Boton Temporal para Ir a Login</a>
+@if (User.IsInRole("admin")) //asi se hace para esconder y mostrar cosas a ciertos roles. Con esto tengo todo lo que pide el profe, ahora solo queda hacerlo lindo.
+{ //Nota: Aca es el ROL, no la POLITICA.
+<a asp-action="Index" asp-controller="Usuarios" class="btn d-block mx-auto btn-lg"> Boton Temporal para Ir a Lista de Usuarios </a>
+}
 
-<a asp-action="Register" asp-controller="User" class="btn d-block mx-auto btn-lg"> Boton Temporal para Ir a Register</a>
+<a asp-action="Login" asp-controller="User" class="btn d-block mx-auto btn-lg"> Boton Temporal para Login</a>
+
+<a asp-action="Register" asp-controller="User" class="btn d-block mx-auto btn-lg"> Boton Temporal para Register</a>
 
 <a asp-action="Logout" asp-controller="User" class="btn d-block mx-auto btn-lg"> Boton Temporal para Logout</a>
 

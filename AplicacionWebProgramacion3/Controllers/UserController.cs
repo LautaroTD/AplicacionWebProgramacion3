@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using System.Security.Claims;
 
 namespace AplicacionWebProgramacion3.Controllers
@@ -31,144 +32,6 @@ namespace AplicacionWebProgramacion3.Controllers
             return View();
         }
 
-        // GET: UserController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: UserController/Create
-        [AllowAnonymous]
-        [HttpPost]
-        public async Task<IActionResult> Create(string nombre, string contrasena, string rol)
-        {
-            if (!ModelState.IsValid)
-            {
-                ViewBag.Error = "Datos inválidos";
-                return View();
-            }
-
-            var existingUser = _context.Usuarios.FirstOrDefault(u => u.Name == nombre && u.Role == rol);
-            if (existingUser != null)
-            {
-                ViewBag.Error = "El usuario ya existe";
-                return View();
-            }
-
-            Random rnd = new Random();
-
-
-            int IdNueva;
-
-            do
-            {
-                IdNueva = rnd.Next(-999999999, 999999999);
-
-                existingUser = _context.Usuarios.FirstOrDefault(u => u.Id == IdNueva); //en esta el nombre que sale en el plantasDbContext
-            }
-            while (existingUser != null);
-
-
-            var passwordHasher = new PasswordHasher<Usuario>(); //en esta linea el modelo
-            var newUser = new Usuario //aca tambien el modelo
-            {
-                Id = IdNueva,
-                Name = nombre,
-                Role = rol
-            };
-
-            newUser.Password = passwordHasher.HashPassword(newUser, contrasena);
-
-            _context.Usuarios.Add(newUser);
-            await _context.SaveChangesAsync();
-
-            // Opcional: loguear automáticamente tras registro
-
-            return RedirectToAction("Index", "Usuario");
-        }
-
-        public async Task<IActionResult> Edit(int id)
-        {
-            //tip: si quere pasar una variable del edit get (este) al edit post (el otro), tenes que agregarla en el formulario, las variables de aca se pasan al formulario, las que no se declaran en el formulario se pierden.
-            //la linea 'var cable = await _context.CableTable.FindAsync(id);' no te estuvo funcionando porque id es ENTERO y IdCab es STRING. creo. y como las rutas son en int olvidate, cagate. pto. tene que transformarlas si o si.
-
-            var cable = await _context.Usuarios.FindAsync(id);
-            if (cable == null)
-            {
-                return NotFound();
-            }
-            return View(cable);
-        }
-
-        // POST: CableController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Usuario cable)
-        { //Nota CLAVE: la parte de "int id" viene de la RUTA del /CableController/Edit/numero, NO del formulario. de eso viene el objeto. Y por eso te esta cagando, porque el Id de tus tablas son string, y vos usas int porque los generas aleatoriamente. Que gana no?
-
-            if (id != cable.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(cable);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_context.Usuarios.Any(e => e.Id == cable.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-            }
-
-            return View(cable);
-        }
-
-        // GET: UsuarioController/Details/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var producto = await _context.Usuarios
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (producto == null)
-            {
-                return NotFound();
-            }
-
-            return View(producto);
-        }
-
-        // POST: CableController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id, IFormCollection collection)
-        {
-            var producto = await _context.Usuarios.FindAsync(id);
-            if(producto is null)
-            {
-                return NotFound();
-            }
-            _context.Usuarios.Remove(producto);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
 
         [AllowAnonymous]
         [HttpGet]
@@ -214,8 +77,8 @@ namespace AplicacionWebProgramacion3.Controllers
             return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+        [HttpGet]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync("MyCookieAuth");
@@ -251,7 +114,7 @@ namespace AplicacionWebProgramacion3.Controllers
             var newUser = new Usuario
             {
                 Name = register.Name,
-                Role = register.Role,
+                Role = "basico",
                 Imagen = register.Imagen
             };
 

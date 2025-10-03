@@ -27,9 +27,19 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
+builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+    options.SignIn.RequireConfirmedAccount = false)
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Admin", policy =>
+    {
+        policy.RequireRole("admin");
+    });
+});
 
 builder.Services.AddAuthentication(options => { options.DefaultScheme = "MyCookieAuth"; })
     .AddCookie("MyCookieAuth", options =>
@@ -42,16 +52,14 @@ builder.Services.AddAuthentication(options => { options.DefaultScheme = "MyCooki
         options.AccessDeniedPath = "/Shared/Error";
     });
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
-
 builder.Services.AddDbContext<plantasDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("plantasDBContext")));
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddRazorPages();
+
 var app = builder.Build();
 
-app.MapIdentityApi<IdentityUser>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
