@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AplicacionWebProgramacion3.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using AplicacionWebProgramacion3.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AplicacionWebProgramacion3.Controllers
 {
@@ -43,6 +44,7 @@ namespace AplicacionWebProgramacion3.Controllers
         }
 
         // GET: Fertilizantes/Create
+        [Authorize(Policy = "AdminFertilizante")]
         public IActionResult Create()
         {
             return View();
@@ -51,6 +53,7 @@ namespace AplicacionWebProgramacion3.Controllers
         // POST: Fertilizantes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Policy = "AdminFertilizante")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Nombre,Forma,Composicion,Tipo,Descripcion")] Fertilizantes fertilizantes)
@@ -65,6 +68,7 @@ namespace AplicacionWebProgramacion3.Controllers
         }
 
         // GET: Fertilizantes/Edit/5
+        [Authorize(Policy = "AdminFertilizante")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,6 +87,7 @@ namespace AplicacionWebProgramacion3.Controllers
         // POST: Fertilizantes/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Policy = "AdminFertilizante")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Forma,Composicion,Tipo,Descripcion")] Fertilizantes fertilizantes)
@@ -116,6 +121,7 @@ namespace AplicacionWebProgramacion3.Controllers
         }
 
         // GET: Fertilizantes/Delete/5
+        [Authorize(Policy = "AdminFertilizante")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,6 +140,7 @@ namespace AplicacionWebProgramacion3.Controllers
         }
 
         // POST: Fertilizantes/Delete/5
+        [Authorize(Policy = "AdminFertilizante")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

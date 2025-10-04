@@ -110,9 +110,18 @@ namespace AplicacionWebProgramacion3.Controllers
                 return View();
             }
 
+            // Generar un ID aleatorio único para el nuevo usuario
+            int newId;
+            var random = new Random();
+            do
+            {
+                newId = random.Next(1, int.MaxValue);
+            } while (_context.Usuarios.Any(u => u.Id == newId));
+
             var passwordHasher = new PasswordHasher<Usuario>();
             var newUser = new Usuario
             {
+                Id = newId,
                 Name = register.Name,
                 Role = "basico",
                 Imagen = register.Imagen

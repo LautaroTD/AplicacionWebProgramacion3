@@ -39,6 +39,18 @@ builder.Services.AddAuthorization(options =>
     {
         policy.RequireRole("admin");
     });
+    options.AddPolicy("AdminPlanta", policy =>
+    {
+        policy.RequireRole("adminPlanta");
+    });
+    options.AddPolicy("AdminFertilizante", policy =>
+    {
+        policy.RequireRole("adminFertilizante");
+    });
+    options.AddPolicy("AdminSuelo", policy =>
+    {
+        policy.RequireRole("adminSuelo");
+    });
 });
 
 builder.Services.AddAuthentication(options => { options.DefaultScheme = "MyCookieAuth"; })

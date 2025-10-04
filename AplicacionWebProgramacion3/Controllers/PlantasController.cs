@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AplicacionWebProgramacion3.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using AplicacionWebProgramacion3.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AplicacionWebProgramacion3.Controllers
 {
@@ -43,6 +44,7 @@ namespace AplicacionWebProgramacion3.Controllers
         }
 
         // GET: Plantas/Create
+        [Authorize(Policy = "AdminPlanta")]
         public IActionResult Create()
         {
             return View();
@@ -51,6 +53,7 @@ namespace AplicacionWebProgramacion3.Controllers
         // POST: Plantas/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Policy = "AdminPlanta")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,NombreCientifico,NombreVulgar,Autor,EpocaFloracion,AlturaMaxima,Descripcion")] Plantas plantas)
@@ -65,6 +68,7 @@ namespace AplicacionWebProgramacion3.Controllers
         }
 
         // GET: Plantas/Edit/5
+        [Authorize(Policy = "AdminPlanta")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,6 +87,7 @@ namespace AplicacionWebProgramacion3.Controllers
         // POST: Plantas/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Policy = "AdminPlanta")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,NombreCientifico,NombreVulgar,Autor,EpocaFloracion,AlturaMaxima,Descripcion")] Plantas plantas)
@@ -116,6 +121,7 @@ namespace AplicacionWebProgramacion3.Controllers
         }
 
         // GET: Plantas/Delete/5
+        [Authorize(Policy = "AdminPlanta")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,6 +140,7 @@ namespace AplicacionWebProgramacion3.Controllers
         }
 
         // POST: Plantas/Delete/5
+        [Authorize(Policy = "AdminPlanta")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

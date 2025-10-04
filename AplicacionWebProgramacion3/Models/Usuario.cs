@@ -12,7 +12,7 @@ namespace AplicacionWebProgramacion3.Models
 
         [Required]
         [MaxLength(250)]
-        public string Name { get; set; }
+        public string Name { get; set; } 
 
         [Required]
         [MaxLength(250)]

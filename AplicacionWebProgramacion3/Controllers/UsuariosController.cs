@@ -1,5 +1,6 @@
 ﻿using AplicacionWebProgramacion3.DTOs;
 using AplicacionWebProgramacion3.Models;
+using AplicacionWebProgramacion3.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -51,7 +52,40 @@ namespace AplicacionWebProgramacion3.Controllers
         [Authorize(Policy = "Admin")]
         public ActionResult Create()
         {
+            /*
+              var model = new UserViewModel
+             {
+                 Roles = new List<SelectListItem>
+                 {
+                     new SelectListItem { Value = "Admin", Text = "Administrador" },
+                     new SelectListItem { Value = "User", Text = "Usuario" },
+                     new SelectListItem { Value = "Guest", Text = "Invitado" }
+                 }
+             };
+
+            var model = new UserViewModel
+            {
+                Roles = //esto en teoria anda igual que el de arriba, pero esta simplificado
+        [
+            new() { Value = "Admin", Text = "admin" },
+            new() { Value = "Admin de Planta", Text = "adminPlanta" },
+            new() { Value = "Admin de Suelo", Text = "adminSuelo" },
+            new() { Value = "Admin de Fertilizante", Text = "adminFertilizante" }
+        ]
+            };
+            */
+
+            ViewBag.Roles = new List<SelectListItem > //forma que recomiendo copilot, quizas mejor que la de chatgpt? (son lo mismo me shupa un huebo)
+    {// acordate que el primero es Value, que es el valor que va a la base de datos. El SEGUNDO es Text, que es el texto que aparece.
+        new SelectListItem { Value = "admin", Text = "Admin" },
+        new SelectListItem { Value = "adminPlanta", Text = "Admin de Planta" },
+        new SelectListItem { Value = "adminSuelo", Text = "Admin de Suelo" },
+        new SelectListItem { Value = "adminFertilizante", Text = "Admin de Fertilizante" },
+        new SelectListItem { Value = "basico", Text = "Basico" }
+        // Agrega más roles según sea necesario
+    };
             return View();
+
         }
 
         // POST: UserController/Create
@@ -73,9 +107,17 @@ namespace AplicacionWebProgramacion3.Controllers
                 return View();
             }
 
+            int newId;
+            var random = new Random();
+            do
+            {
+                newId = random.Next(1, int.MaxValue);
+            } while (_context.Usuarios.Any(u => u.Id == newId));
+
             var passwordHasher = new PasswordHasher<Usuario>();
             var newUser = new Usuario
             {
+                Id = newId,
                 Name = register.Name,
                 Role = register.Role,
                 Imagen = register.Imagen
@@ -88,7 +130,7 @@ namespace AplicacionWebProgramacion3.Controllers
 
             // Opcional: loguear automáticamente tras registro
 
-            return RedirectToAction("Index", "User");
+            return RedirectToAction("Index", "Usuarios");
         }
 
         [Authorize(Policy = "Admin")]
@@ -96,6 +138,16 @@ namespace AplicacionWebProgramacion3.Controllers
         {
             //tip: si quere pasar una variable del edit get (este) al edit post (el otro), tenes que agregarla en el formulario, las variables de aca se pasan al formulario, las que no se declaran en el formulario se pierden.
             //la linea 'var cable = await _context.CableTable.FindAsync(id);' no te estuvo funcionando porque id es ENTERO y IdCab es STRING. creo. y como las rutas son en int olvidate, cagate. pto. tene que transformarlas si o si.
+
+            ViewBag.Roles = new List<SelectListItem> //forma que recomiendo copilot, quizas mejor que la de chatgpt? (son lo mismo me shupa un huebo)
+    {// acordate que el primero es Value, que es el valor que va a la base de datos. El SEGUNDO es Text, que es el texto que aparece.
+        new SelectListItem { Value = "admin", Text = "Admin" },
+        new SelectListItem { Value = "adminPlanta", Text = "Admin de Planta" },
+        new SelectListItem { Value = "adminSuelo", Text = "Admin de Suelo" },
+        new SelectListItem { Value = "adminFertilizante", Text = "Admin de Fertilizante" },
+        new SelectListItem { Value = "basico", Text = "Basico" }
+        // Agrega más roles según sea necesario
+    };
 
             var cable = await _context.Usuarios.FindAsync(id);
             if (cable == null)
@@ -109,36 +161,32 @@ namespace AplicacionWebProgramacion3.Controllers
         [Authorize(Policy = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Usuario cable)
+        public async Task<IActionResult> Edit(int id, Usuario user)
         { //Nota CLAVE: la parte de "int id" viene de la RUTA del /CableController/Edit/numero, NO del formulario. de eso viene el objeto. Y por eso te esta cagando, porque el Id de tus tablas son string, y vos usas int porque los generas aleatoriamente. Que gana no?
 
-            if (id != cable.Id)
-            {
+            ViewBag.Roles = new List<SelectListItem> //forma que recomiendo copilot, quizas mejor que la de chatgpt? (son lo mismo me shupa un huebo)
+    {// acordate que el primero es Value, que es el valor que va a la base de datos. El SEGUNDO es Text, que es el texto que aparece.
+        new SelectListItem { Value = "admin", Text = "Admin" },
+        new SelectListItem { Value = "adminPlanta", Text = "Admin de Planta" },
+        new SelectListItem { Value = "adminSuelo", Text = "Admin de Suelo" },
+        new SelectListItem { Value = "adminFertilizante", Text = "Admin de Fertilizante" },
+        new SelectListItem { Value = "basico", Text = "Basico" }
+        // Agrega más roles según sea necesario
+    };
+
+            var usuarioOriginal = await _context.Usuarios.FindAsync(id);
+            if (usuarioOriginal == null)
                 return NotFound();
-            }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(cable);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_context.Usuarios.Any(e => e.Id == cable.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-            }
+            // Actualizar solo los campos permitidos
+            usuarioOriginal.Name = user.Name;
+            usuarioOriginal.Role = user.Role;
+            usuarioOriginal.Imagen = user.Imagen;
+            // Si quieres permitir cambiar la contraseña, aquí deberías hashearla
 
-            return View(cable);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Usuarios");
         }
 
         // GET: UsuarioController/Details/5

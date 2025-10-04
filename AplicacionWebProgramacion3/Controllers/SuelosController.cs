@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AplicacionWebProgramacion3.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AplicacionWebProgramacion3.Controllers
 {
@@ -43,6 +44,7 @@ namespace AplicacionWebProgramacion3.Controllers
         }
 
         // GET: Suelos/Create
+        [Authorize(Policy = "AdminSuelo")]
         public IActionResult Create()
         {
             return View();
@@ -51,20 +53,49 @@ namespace AplicacionWebProgramacion3.Controllers
         // POST: Suelos/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Policy = "AdminSuelo")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,Nombre,pH,Tipo")] Suelos suelos)
+        public async Task<IActionResult> Create(Suelos suelos)
         {
-            if (ModelState.IsValid)
+            int newId;
+            var random = new Random();
+            do
             {
-                _context.Add(suelos);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(suelos);
+                newId = random.Next(1, int.MaxValue);
+            } while (_context.Usuarios.Any(u => u.Id == newId));
+
+            /*
+              var newUser = new Usuario
+            {
+                Id = newId,
+                Name = register.Name,
+                Role = register.Role,
+                Imagen = register.Imagen
+            };
+            */
+
+            var newSuelo = new Suelos
+            {
+                Id = newId,
+                Nombre = suelos.Nombre,
+                PH = suelos.PH,
+                Tipo = suelos.Tipo
+            };
+
+            /*
+            _context.Usuarios.Add(newUser);
+            await _context.SaveChangesAsync();
+            */
+
+            _context.Suelos.Add(newSuelo);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Suelos");
         }
 
         // GET: Suelos/Edit/5
+        [Authorize(Policy = "AdminSuelo")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,14 +114,16 @@ namespace AplicacionWebProgramacion3.Controllers
         // POST: Suelos/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Policy ="AdminSuelo")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,Nombre,pH,Tipo")] Suelos suelos)
+        public async Task<IActionResult> Edit(int id, Suelos suelos)
         {
             if (id != suelos.Id)
             {
                 return NotFound();
             }
+
 
             if (ModelState.IsValid)
             {
@@ -116,6 +149,7 @@ namespace AplicacionWebProgramacion3.Controllers
         }
 
         // GET: Suelos/Delete/5
+        [Authorize(Policy = "AdminSuelo")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,6 +168,7 @@ namespace AplicacionWebProgramacion3.Controllers
         }
 
         // POST: Suelos/Delete/5
+        [Authorize(Policy = "AdminSuelo")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
