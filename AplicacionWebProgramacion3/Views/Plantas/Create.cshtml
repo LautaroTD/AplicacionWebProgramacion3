@@ -1,61 +1,69 @@
 ﻿@model AplicacionWebProgramacion3.Models.Plantas
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Crear Planta";
 }
 
-<h1>Create</h1>
-
-<h4>Plantas</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" />
-                <span asp-validation-for="Id" class="text-danger"></span>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-success text-white text-center">
+                    <h2 class="mb-0"><i class="bi bi-flower1"></i> Nueva Planta</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Id" class="form-label fw-bold"></label>
+                            <input asp-for="Id" class="form-control" />
+                            <span asp-validation-for="Id" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="NombreCientifico" class="form-label fw-bold"></label>
+                            <input asp-for="NombreCientifico" class="form-control" />
+                            <span asp-validation-for="NombreCientifico" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="NombreVulgar" class="form-label fw-bold"></label>
+                            <input asp-for="NombreVulgar" class="form-control" />
+                            <span asp-validation-for="NombreVulgar" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Autor" class="form-label fw-bold"></label>
+                            <input asp-for="Autor" class="form-control" />
+                            <span asp-validation-for="Autor" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="EpocaFloracion" class="form-label fw-bold"></label>
+                            <input asp-for="EpocaFloracion" class="form-control" />
+                            <span asp-validation-for="EpocaFloracion" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="AlturaMaxima" class="form-label fw-bold"></label>
+                            <input asp-for="AlturaMaxima" class="form-control" />
+                            <span asp-validation-for="AlturaMaxima" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label asp-for="Descripcion" class="form-label fw-bold"></label>
+                            <textarea asp-for="Descripcion" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Descripcion" class="text-danger"></span>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="bi bi-plus-circle"></i> Crear
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center">
+                    <a asp-action="Index" class="btn btn-outline-secondary mt-2">
+                        <i class="bi bi-arrow-left"></i> Volver al listado
+                    </a>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="NombreCientifico" class="control-label"></label>
-                <input asp-for="NombreCientifico" class="form-control" />
-                <span asp-validation-for="NombreCientifico" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NombreVulgar" class="control-label"></label>
-                <input asp-for="NombreVulgar" class="form-control" />
-                <span asp-validation-for="NombreVulgar" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Autor" class="control-label"></label>
-                <input asp-for="Autor" class="form-control" />
-                <span asp-validation-for="Autor" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EpocaFloracion" class="control-label"></label>
-                <input asp-for="EpocaFloracion" class="form-control" />
-                <span asp-validation-for="EpocaFloracion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AlturaMaxima" class="control-label"></label>
-                <input asp-for="AlturaMaxima" class="form-control" />
-                <span asp-validation-for="AlturaMaxima" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Descripcion" class="control-label"></label>
-                <input asp-for="Descripcion" class="form-control" />
-                <span asp-validation-for="Descripcion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

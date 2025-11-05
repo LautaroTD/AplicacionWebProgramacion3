@@ -2,35 +2,51 @@
 @model RegisterDTO;
 
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Registro de Usuario";
 }
-<h2>@ViewData["Title"]</h2>
 
-<body>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h2>@ViewData["Title"]</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Register" asp-controller="User" method="post" autocomplete="off">
+                        <div class="form-group mb-3">
+                            <label class="form-label">Nombre</label>
+                            <input asp-for="Name" class="form-control" placeholder="Ingrese su nombre" />
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label class="form-label">Contraseña</label>
+                            <input asp-for="Password" class="form-control" type="password" placeholder="Ingrese su contraseña" />
+                        </div>
 
-    <form asp-action="Register" asp-controller="User" method="post">
+                        <div class="form-group mb-3">
+                            <label class="form-label">Verificar Contraseña</label>
+                            <input asp-for="PasswordForVerification" class="form-control" type="password" placeholder="Repita su contraseña" />
+                        </div>
 
-        <div class="form-group">
-            <label>Nombre</label>
-            <input asp-for="Name" class="form-control" />
+                        <div class="form-group mb-4">
+                            <label class="form-label">Imagen</label>
+                            <input asp-for="Imagen" class="form-control" placeholder="URL de la imagen" />
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-person-plus"></i> Registrar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-end">
+                    <a asp-action="Index" asp-controller="Home" class="btn btn-success btn-lg">
+                        <i class="bi bi-arrow-left-circle"></i> Volver
+                    </a>
+                </div>
+            </div>
         </div>
-        
-        <div class="form-group">
-            <label>Contraseña</label>
-            <input asp-for="Password" class="form-control" type="password" />
-        </div>
-
-        <div class="form-group">
-            <label>Verificar Contraseña</label>
-            <input asp-for="PasswordForVerification" class="form-control" type="password" />
-        </div>
-
-        <div class="form-group">
-            <label>Imagen</label>
-            <input asp-for="Imagen" class="form-control" />
-        </div>
-
-        <button type="submit">-{Registrar}-</button>
-    </form>
-
-</body>
+    </div>
+</div>

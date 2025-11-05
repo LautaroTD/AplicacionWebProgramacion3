@@ -1,53 +1,69 @@
 ﻿@model IEnumerable<AplicacionWebProgramacion3.Models.Suelos>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Listado de Suelos";
 }
 
-<h1>Index</h1>
+<div class="container mt-4">
+    <div class="row mb-3">
+        <div class="col">
+            <h1 class="display-5 text-primary">
+                <i class="bi bi-tree"></i> Listado de Suelos
+            </h1>
+        </div>
+        <div class="col text-end">
+            <a asp-action="Index" asp-controller="Home" class="btn btn-success btn-lg">
+                <i class="bi bi-arrow-left-circle"></i> Volver
+            </a>
+        </div>
+    </div>
 
-@if (User.IsInRole("adminSuelo"))
-{
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-}
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PH)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Tipo)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PH)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tipo)
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> 
-                @if (User.IsInRole("adminSuelo"))
-                {
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+    @if (User.IsInRole("adminSuelo"))
+    {
+        <div class="row mb-3">
+            <div class="col text-end">
+                <a asp-action="Create" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Nuevo Suelo
+                </a>
+            </div>
+        </div>
+    }
+
+    <div class="card shadow">
+        <div class="card-body p-0">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.Nombre)</th>
+                        <th>@Html.DisplayNameFor(model => model.PH)</th>
+                        <th>@Html.DisplayNameFor(model => model.Tipo)</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model) {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
+                        <td>@Html.DisplayFor(modelItem => item.PH)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Tipo)</td>
+                        <td class="text-center">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info btn-sm me-1">
+                                <i class="bi bi-eye">Detalles</i>
+                            </a>
+                            @if (User.IsInRole("adminSuelo"))
+                            {
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning btn-sm me-1">
+                                    <i class="bi bi-pencil">Editar</i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm">
+                                    <i class="bi bi-trash">Eliminar</i>
+                                </a>
+                            }
+                        </td>
+                    </tr>
                 }
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

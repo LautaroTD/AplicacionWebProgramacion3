@@ -58,12 +58,6 @@ namespace AplicacionWebProgramacion3.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Suelos suelos)
         {
-            int newId;
-            var random = new Random();
-            do
-            {
-                newId = random.Next(1, int.MaxValue);
-            } while (_context.Usuarios.Any(u => u.Id == newId));
 
             /*
               var newUser = new Usuario
@@ -77,7 +71,6 @@ namespace AplicacionWebProgramacion3.Controllers
 
             var newSuelo = new Suelos
             {
-                Id = newId,
                 Nombre = suelos.Nombre,
                 PH = suelos.PH,
                 Tipo = suelos.Tipo

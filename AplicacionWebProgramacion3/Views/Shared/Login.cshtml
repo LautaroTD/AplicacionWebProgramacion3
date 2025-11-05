@@ -4,9 +4,71 @@
 @{
     ViewData["Title"] = "Login";
 }
-<h2>@ViewData["Title"]</h2>
 
-<body>
+<style>
+    body {
+        background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+        min-height: 100vh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .login-container {
+        max-width: 400px;
+        margin: 60px auto;
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        padding: 40px 30px 30px 30px;
+    }
+    .login-title {
+        text-align: center;
+        font-weight: 700;
+        color: #2d3a4b;
+        margin-bottom: 30px;
+        letter-spacing: 1px;
+    }
+    .form-group label {
+        font-weight: 500;
+        color: #2d3a4b;
+    }
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid #bfc9d1;
+        margin-bottom: 18px;
+        padding: 10px 12px;
+        font-size: 1rem;
+    }
+    .btn-login {
+        width: 100%;
+        background: linear-gradient(90deg, #4e54c8 0%, #8f94fb 100%);
+        color: #fff;
+        font-weight: 600;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 0;
+        font-size: 1.1rem;
+        transition: background 0.2s;
+        margin-top: 10px;
+    }
+    .btn-login:hover {
+        background: linear-gradient(90deg, #8f94fb 0%, #4e54c8 100%);
+    }
+    .alert {
+        margin-bottom: 20px;
+    }
+    .volver-link {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 18px;
+    }
+    .btn-lg {
+        font-size: 1rem;
+        padding: 8px 18px;
+        border-radius: 8px;
+    }
+</style>
+
+<div class="login-container">
+    <h2 class="login-title">@ViewData["Title"]</h2>
 
     @if (ViewBag.Error != null)
     {
@@ -16,18 +78,22 @@
     }
 
     <form asp-action="Login" asp-controller="User" method="post">
-
         <div class="form-group">
-            <label>Nombre</label>
-            <input asp-for="Name" class="form-control" />
+            <label for="Name">Nombre</label>
+            <input asp-for="Name" class="form-control" placeholder="Ingrese su nombre" />
         </div>
 
         <div class="form-group">
-            <label>Contraseña</label>
-            <input asp-for="Password" class="form-control" />
+            <label for="Password">Contraseña</label>
+            <input asp-for="Password" class="form-control" placeholder="Ingrese su contraseña" type="password" />
         </div>
 
-        <button type="submit">-{Logearse}-</button>
+        <button type="submit" class="btn btn-login">Iniciar sesión</button>
     </form>
 
-</body>
+    <div class="volver-link">
+        <a asp-action="Index" asp-controller="Home" class="btn btn-success btn-lg">
+            <i class="bi bi-arrow-left-circle"></i> Volver
+        </a>
+    </div>
+</div>

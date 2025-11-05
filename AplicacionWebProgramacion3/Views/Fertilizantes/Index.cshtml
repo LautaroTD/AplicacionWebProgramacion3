@@ -1,64 +1,72 @@
 ﻿@model IEnumerable<AplicacionWebProgramacion3.Models.Fertilizantes>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Fertilizantes";
 }
 
-<h1>Index</h1>
-@if (User.IsInRole("adminFertilizante"))
-{
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-}
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Forma)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Composicion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Tipo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Descripcion)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Forma)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Composicion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tipo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descripcion)
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> 
-                @if (User.IsInRole("adminFertilizante"))
-                {
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="display-4 text-primary">
+                <i class="bi bi-flower1"></i> Fertilizantes
+            </h1>
+        </div>
+        <div class="col text-end">
+            @if (User.IsInRole("adminFertilizante"))
+            {
+                <a asp-action="Create" class="btn btn-success btn-lg">
+                    <i class="bi bi-plus-circle"></i> Nuevo Fertilizante
+                </a>
+            }
+        </div>
+        <div class="col text-end">
+                <a asp-action="Index" asp-controller="Home" class="btn btn-success btn-lg">
+                    <i class="bi bi-plus-circle"></i> Volver
+                </a>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <table class="table table-hover align-middle">
+                <thead class="table-primary">
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.Nombre)</th>
+                        <th>@Html.DisplayNameFor(model => model.Forma)</th>
+                        <th>@Html.DisplayNameFor(model => model.Composicion)</th>
+                        <th>@Html.DisplayNameFor(model => model.Tipo)</th>
+                        <th>@Html.DisplayNameFor(model => model.Descripcion)</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model) {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Forma)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Composicion)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Tipo)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Descripcion)</td>
+                        <td class="text-center">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm me-1">
+                                <i class="bi bi-eye">Detalles</i>
+                            </a>
+                            @if (User.IsInRole("adminFertilizante"))
+                            {
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm me-1">
+                                    <i class="bi bi-pencil-square">Editar</i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+                                    <i class="bi bi-trash">Eliminar</i>
+                                </a>
+                            }
+                        </td>
+                    </tr>
                 }
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Asegúrate de tener Bootstrap y Bootstrap Icons referenciados en tu _Layout.cshtml -->
